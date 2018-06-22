@@ -20,20 +20,38 @@ public class EmployeeDAO {
 	@PersistenceContext
 	EntityManager em;
 
+	public EmployeeDetailsEntity validateEmploeeDetails(String empId)
+	{
+		return em.find(EmployeeDetailsEntity.class, empId); 
+	}
 	@Transactional
 	public void saveEmploeeDetails(EmployeeDetails empDetalis)
 	{
-		EmployeeDetailsEntity detailsEntity = new EmployeeDetailsEntity();
-		detailsEntity.setEnabled(0);
-		detailsEntity.setEmp_id(empDetalis.getEmp_id());
-		detailsEntity.setFirst_name(empDetalis.getFirst_name());
-		detailsEntity.setLast_name(empDetalis.getLast_name());
-		detailsEntity.setIbm_mail_id(empDetalis.getIbm_mail_id());
-		detailsEntity.setPh_number(empDetalis.getPh_number());
-		detailsEntity.setPassword(encoder.encode(empDetalis.getPassword()));
+		try 
+		{
+			if(validateEmploeeDetails(empDetalis.getEmp_id()) == null)
+			{
+				EmployeeDetailsEntity detailsEntity = new EmployeeDetailsEntity();
+				detailsEntity.setEnabled(0);
+				detailsEntity.setEmp_id(empDetalis.getEmp_id());
+				detailsEntity.setFirst_name(empDetalis.getFirst_name());
+				detailsEntity.setLast_name(empDetalis.getLast_name());
+				detailsEntity.setIbm_mail_id(empDetalis.getIbm_mail_id());
+				detailsEntity.setPh_number(empDetalis.getPh_number());
+				detailsEntity.setPassword(encoder.encode(empDetalis.getPassword()));
+				
+				em.persist(detailsEntity);
+			}
+			else
+			{
+				throw new RuntimeException("User Already Existed");
+			}
+			
+		}
+		catch (Exception e)
+		{
+			throw new RuntimeException(e);
+		}
 		
-		em.persist(detailsEntity);
 	}
-	
-
 }

@@ -6,36 +6,44 @@
 <link rel="stylesheet" href="./CSS/pmoservice.css">
 <style>
 body {
-	background: #47476b;
+	color:black;
 }
 </style>
 </head>
 <body>
-	<div class="showEmpDetails">
-		<table>
+<jsp:include page ="header.jsp"/>
+	<div style="height: 86vh; color: black; text-align: center; border-radius: 0px; border: 1px solid red; margin-top: 10px;">
+	<div style="color: white; text-align: center; font-size: 30px; background: red; padding: 10px; border-radius: 0px; border: 2px solid red; margin-top: 0px;">
+		Employee Details Page
+	</div>
+		<table border="0" cellspacing="10" align="center" style="width: 30%; text-align: left; border: 1px solid red; margin-top: 30px;position: absolute;">
 			<tr>
-				<td>Emp Id</td>
+				<th width="40%">Employee Id :</th>
 				<td>${result.getEmp_id()}</td>
 			</tr>
 			<tr>
-				<td>First Name</td>
+				<th>First Name :</th>
 				<td>${result.getFirst_name()}</td>
 			</tr>
+
 			<tr>
-				<td>Last Name</td>
+				<th>Last Name :</th>
 				<td>${result.getLast_name()}</td>
 			</tr>
 			<tr>
-				<td>IBM Mail ID</td>
+				<th>IBM Mail ID :</th>
 				<td>${result.getIbm_mail_id()}</td>
 			</tr>
 			<tr>
-				<td>Phone Number</td>
+				<th>Phone Number :</th>
 				<td>${result.getPh_number()}</td>
 			</tr>
 			
+			<tr>
+				<td>&nbsp;</td>
+				<td align="left"><input style="font-size: 15px;color: black; text-align: center;padding: 10px 20px;border: 0px solid #ddd;border-radius: 10px;" type="button" value="Update"></td>
+			</tr>
 		</table>
 	</div>
-	<a style="align:center" href="${pageContext.request.contextPath}/showLogin">Login</a>
 </body>
 </html>

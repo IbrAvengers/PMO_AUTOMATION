@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.model.EmployeeAllDetails;
 import com.model.EmployeeDetails;
 import com.model.LoginForm;
 import com.service.EmpService;
@@ -27,10 +28,19 @@ public class EmpMVCController
 	@RequestMapping(value="/saveEmpDetails")
 	public String saveEmpDetails(Model model,@ModelAttribute("signUpForm") EmployeeDetails details)
 	{
-		empService.saveEmploeeDetails(details);
-		model.addAttribute("result", details);
+		try {
+			empService.saveEmploeeDetails(details);
+			model.addAttribute("result", details);
+			return "showRegDetails";
+			
+		} catch (Exception e) 
+		{
+			model.addAttribute("error", e.getMessage());
+			return "errorPage";
+		}
 		
-		return "showRegDetails";
+		
+		
 	}
 	
 	@RequestMapping(value="/showLogin")
@@ -67,19 +77,23 @@ public class EmpMVCController
 		}
 		if(is_admin)
 		{
-			model.addAttribute("result", roles);
+			EmployeeAllDetails[] details = empService.listAllEmployees(form.getUsername(), form.getPassword());
+			model.addAttribute("result", details);
 			return "showAdminPage";
 		}
 		else if(is_manager)
 		{
-			model.addAttribute("result", roles);
+			EmployeeDetails emp = empService.empService(form.getUsername(), form.getPassword());
+			EmployeeAllDetails[] details = empService.listManagerReporties(form.getUsername(), form.getPassword());
+			model.addAttribute("manager", emp);
+			model.addAttribute("result", details);
 			return "showManagerPage";
 		}
 		else if(is_user)
 		{
 			try
 			{
-				EmployeeDetails details = empService.empService(form.getUsername(), form.getUsername(), form.getPassword());
+				EmployeeDetails details = empService.empService(form.getUsername(), form.getPassword());
 				model.addAttribute("result", details);
 				return "showEmpDetails";
 			} 

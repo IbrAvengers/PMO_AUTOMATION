@@ -12,13 +12,13 @@ body {
 <script>
 
 	function validateSignUp() {
-		var empid = document.signUpForm.empId.value;
-		var firstname = document.signUpForm.firstName.value;
-		var lastname = document.signUpForm.lastName.value;
-		var mailid = document.signUpForm.ibmMailId.value;
-		var phnumber = document.signUpForm.phNumber.value;
+		var empid = document.signUpForm.emp_id.value;
+		var firstname = document.signUpForm.first_name.value;
+		var lastname = document.signUpForm.last_name.value;
+		var mailid = document.signUpForm.ibm_mail_id.value;
+		var phnumber = document.signUpForm.ph_number.value;
 		var password = document.signUpForm.password.value;
-		var confirmpassword = document.signUpForm.confirmPassword.value;
+		var confirmpassword = document.signUpForm.confirm_password.value;
 
 		if (empid == null || empid == "") {
 			alert("Please enter employee id");

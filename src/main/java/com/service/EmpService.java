@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.dao.EmployeeDAO;
+import com.model.EmployeeAllDetails;
 import com.model.EmployeeDetails;
 
 @Service
@@ -19,8 +20,10 @@ public class EmpService
 	String loginServiceURL;
 	@Value("${service.getemp.url}")
 	String getEmpURL;
-	@Value("${service.listEmp.url}")
+	@Value("${service.listAllEmp.url}")
 	String listEmpURL;
+	@Value("${service.listManagerReporties.url}")
+	String listEmpManagerURL;
 	
 	public void saveEmploeeDetails(EmployeeDetails empDetalis)
 	{
@@ -48,18 +51,64 @@ public class EmpService
 
 	}
 	
-	public EmployeeDetails empService(String id,String username,String password)
+	public EmployeeDetails empService(String username,String password)
 	{
 		String url = null;
 		ResponseEntity<EmployeeDetails> entity = null;
 		
 		try 
 		{
-			url = getEmpURL+"/"+id;
-			System.out.println("----------- url"+url);
+			url = getEmpURL+"/"+username;
 			RestTemplate rt = new RestTemplate();
 			rt.getInterceptors().add(new BasicAuthorizationInterceptor(username, password));
 			entity = rt.getForEntity(url, EmployeeDetails.class);
+			if(entity.getStatusCode().value() == 404)
+				throw new RuntimeException("Employee Not Found");
+			else
+				return 	entity.getBody();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new RuntimeException("Exception in Service Call");
+		}
+
+	}
+	public EmployeeAllDetails[] listAllEmployees(String username,String password)
+	{
+		String url = null;
+		ResponseEntity<EmployeeAllDetails[]> entity = null;
+		
+		try 
+		{
+			url = listEmpURL;
+			RestTemplate rt = new RestTemplate();
+			rt.getInterceptors().add(new BasicAuthorizationInterceptor(username, password));
+			entity = rt.getForEntity(url, EmployeeAllDetails[].class);
+			if(entity.getStatusCode().value() == 404)
+				throw new RuntimeException("Employee Not Found");
+			else
+				return 	entity.getBody();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new RuntimeException("Exception in Service Call");
+		}
+
+	}
+	
+	public EmployeeAllDetails[] listManagerReporties(String username,String password)
+	{
+		String url = null;
+		ResponseEntity<EmployeeAllDetails[]> entity = null;
+		
+		try 
+		{
+			url = listEmpManagerURL+"/"+username;
+			RestTemplate rt = new RestTemplate();
+			rt.getInterceptors().add(new BasicAuthorizationInterceptor(username, password));
+			entity = rt.getForEntity(url, EmployeeAllDetails[].class);
 			if(entity.getStatusCode().value() == 404)
 				throw new RuntimeException("Employee Not Found");
 			else
